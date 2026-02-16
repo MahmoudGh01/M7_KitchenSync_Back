@@ -1,8 +1,16 @@
-from __future__ import annotations
-
 from flask import Flask
-
-from config import Config
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config.from_object(Config)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = \
+    "mysql+pymysql://root:@localhost:3306/KitchenSync"
+
+db = SQLAlchemy(app)
+
+with app.app_context():
+    try:
+        db.engine.connect()
+        print("✅ Connected successfully")
+    except Exception as e:
+        print("❌ Connection failed:", e)
