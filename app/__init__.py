@@ -2,8 +2,10 @@
 
 from flask import Flask
 from flask_jwt_extended import JWTManager
+from flask_restx import Api
 
 from app.Models.UserModel import db, User
+from app.Routes.AuthRoutes import auth_ns
 
 app = Flask(__name__)
 
@@ -16,6 +18,8 @@ app.config["JWT_REFRESH_TOKEN_EXPIRES"] = 604800  # 7 days
 
 db.init_app(app)
 jwt = JWTManager(app)
+api = Api(app, doc="/docs")
+api.add_namespace(auth_ns)
 
 with app.app_context():
     try:
