@@ -51,7 +51,7 @@ def create_app(config_name: str = None) -> Flask:
     
     # Initialize extensions
     db.init_app(app)
-    jwt = JWTManager(app)
+    JWTManager(app)
     
     # Initialize CORS with configuration
     cors.init_app(

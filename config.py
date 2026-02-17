@@ -53,7 +53,6 @@ class Config:
     def setup_logging(app):
         """Configure logging for the application."""
         import os
-        import logging
         from logging.handlers import RotatingFileHandler
         
         # Get log level from config
