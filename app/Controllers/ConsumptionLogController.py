@@ -43,7 +43,7 @@ class ConsumptionLogListResource(Resource):
     def post(self):
         """Create a new consumption log (reduces item quantity)."""
         data = _get_json()
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         item_id = data.get("item_id")
         percent_used = data.get("percent_used")
 

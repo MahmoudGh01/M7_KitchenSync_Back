@@ -43,7 +43,7 @@ class RestockLogListResource(Resource):
     def post(self):
         """Create a new restock log (restocks item to 100%)."""
         data = _get_json()
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         item_id = data.get("item_id")
 
         if not item_id:
