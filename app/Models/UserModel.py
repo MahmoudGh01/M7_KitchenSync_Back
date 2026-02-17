@@ -1,37 +1,39 @@
-# models/user.py
-
-from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-from passlib.hash import bcrypt
-
-db = SQLAlchemy()
-
+from sqlalchemy import String, ForeignKey, Boolean
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    display_name: Mapped[str] = mapped_column(String(80), nullable=False)
 
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    password_hash = db.Column(db.String(255), nullable=False)
+    kitchen_id: Mapped[int] = mapped_column(
+        ForeignKey("kitchens.id"),
+        nullable=False
+    )
 
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
-    # 🔹 Password setter
+    kitchen = relationship("Kitchen", back_populates="users")
+    restocks = relationship("RestockLog", back_populates="user")
+    consumptions = relationship("ConsumptionLog", back_populates="user")
+
     def set_password(self, password: str):
-        self.password_hash = bcrypt.hash(password)
+        self.password_hash = generate_password_hash(password)
 
-    # 🔹 Password verifier
     def check_password(self, password: str) -> bool:
-        return bcrypt.verify(password, self.password_hash)
+        return check_password_hash(self.password_hash, password)
 
-    # 🔹 Serialize user
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             "id": self.id,
-            "username": self.username,
-            "email": self.email,
+            "display_name": self.display_name,
+            "kitchen_id": self.kitchen_id,
+            "kitchen_code": self.kitchen.code if self.kitchen else None,
+            "is_active": self.is_active,
         }

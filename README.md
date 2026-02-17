@@ -53,7 +53,7 @@ Base path: `/auth`
 ```bash
 curl -X POST http://0.0.0.0:8000/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"username":"demo","email":"demo@example.com","password":"Strong#123"}'
+  -d '{"display_name":"demo","kitchen_code":"123456","password":"Strong#123"}'
 ```
 
 ### Login
@@ -61,7 +61,7 @@ curl -X POST http://0.0.0.0:8000/auth/register \
 ```bash
 curl -X POST http://0.0.0.0:8000/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"identity":"demo@example.com","password":"Strong#123"}'
+  -d '{"display_name":"demo","kitchen_code":"123456","password":"Strong#123"}'
 ```
 
 ### Refresh Access Token
@@ -80,5 +80,5 @@ curl -X GET http://0.0.0.0:8000/auth/me \
 
 ## Validation Rules
 
-- Email must be valid format.
+- Kitchen code must be exactly 6 digits.
 - Password must be at least 8 characters and include upper, lower, number, and symbol.
