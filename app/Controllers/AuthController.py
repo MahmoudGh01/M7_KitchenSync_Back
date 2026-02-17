@@ -111,7 +111,7 @@ class LoginResource(Resource):
 class RefreshResource(Resource):
     @jwt_required(refresh=True)
     def post(self):
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         access_token = AuthService.refresh_access_token(user_id=user_id)
         return {"access_token": access_token}, 200
 
@@ -119,7 +119,7 @@ class RefreshResource(Resource):
 class MeResource(Resource):
     @jwt_required()
     def get(self):
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         if not user:
             return _error("user_not_found", "User not found"), 404

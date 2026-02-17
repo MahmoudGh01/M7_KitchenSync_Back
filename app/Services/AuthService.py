@@ -52,8 +52,8 @@ class AuthService:
 
     @staticmethod
     def generate_tokens(user: User) -> dict:
-        access_token = create_access_token(identity=user.id)
-        refresh_token = create_refresh_token(identity=user.id)
+        access_token = create_access_token(identity=str(user.id))
+        refresh_token = create_refresh_token(identity=str(user.id))
         return {
             "access_token": access_token,
             "refresh_token": refresh_token,
@@ -61,4 +61,4 @@ class AuthService:
 
     @staticmethod
     def refresh_access_token(user_id: int) -> str:
-        return create_access_token(identity=user_id)
+        return create_access_token(identity=str(user_id))
