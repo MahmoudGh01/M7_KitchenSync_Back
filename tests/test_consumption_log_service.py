@@ -2,8 +2,8 @@
 Unit tests for ConsumptionLogService.
 """
 import pytest
-from app.Services.ConsumptionLogService import ConsumptionLogService
-from app.Models.item import ItemStatus
+from app.services.consumption_log_service import ConsumptionLogService
+from app.models.item import ItemStatus
 
 
 @pytest.mark.unit
@@ -29,7 +29,7 @@ class TestConsumptionLogService:
             assert log.percent_used == 25.0
             
             # Query item again to see changes
-            from app.Models.item import Item
+            from app.models.item import Item
             updated_item = Item.query.get(item_id)
             # Check that item quantity was reduced
             assert updated_item.quantity_percent == 75.0
@@ -49,7 +49,7 @@ class TestConsumptionLogService:
             assert log is not None
             
             # Query item again to see changes
-            from app.Models.item import Item
+            from app.models.item import Item
             updated_item = Item.query.get(item_id)
             # Check that item is depleted and status updated
             assert updated_item.quantity_percent == 0.0

@@ -4,8 +4,8 @@ from typing import Optional
 from datetime import datetime
 
 from app.extensions import db
-from app.Models.restock_log import RestockLog
-from app.Models.item import Item, ItemStatus
+from app.models.restock_log import RestockLog
+from app.models.item import Item, ItemStatus
 
 
 class RestockLogService:

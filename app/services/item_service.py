@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional
 
 from app.extensions import db
-from app.Models.item import Item, ItemStatus
+from app.models.item import Item, ItemStatus
 
 
 class ItemService:

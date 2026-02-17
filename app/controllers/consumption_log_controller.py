@@ -4,7 +4,7 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Resource
 
-from app.Services.ConsumptionLogService import ConsumptionLogService
+from app.services.consumption_log_service import ConsumptionLogService
 
 
 def _get_json() -> dict:

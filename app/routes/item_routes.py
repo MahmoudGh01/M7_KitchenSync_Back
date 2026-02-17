@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from flask_restx import Namespace, fields
 
-from app.Controllers.ItemController import (
+from app.controllers.item_controller import (
     ItemListResource,
     ItemResource,
     ItemQuantityResource,

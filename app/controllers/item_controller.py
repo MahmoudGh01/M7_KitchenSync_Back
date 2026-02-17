@@ -4,8 +4,8 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Resource
 
-from app.Services.ItemService import ItemService
-from app.Models.item import ItemStatus
+from app.services.item_service import ItemService
+from app.models.item import ItemStatus
 
 
 def _get_json() -> dict:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from flask_restx import Namespace, fields
 
-from app.Controllers.RestockLogController import (
+from app.controllers.restock_log_controller import (
     RestockLogListResource,
     RestockLogResource,
 )

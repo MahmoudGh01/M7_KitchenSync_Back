@@ -4,8 +4,8 @@ from typing import Optional
 from datetime import datetime
 
 from app.extensions import db
-from app.Models.consumption_log import ConsumptionLog
-from app.Models.item import Item, ItemStatus
+from app.models.consumption_log import ConsumptionLog
+from app.models.item import Item, ItemStatus
 
 
 class ConsumptionLogService:

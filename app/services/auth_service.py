@@ -5,8 +5,8 @@ from typing import Optional
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 from app.extensions import db
-from app.Models.UserModel import User
-from app.Models.kitchen import Kitchen
+from app.models.user_model import User
+from app.models.kitchen import Kitchen
 
 
 class AuthService:

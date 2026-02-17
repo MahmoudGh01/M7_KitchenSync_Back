@@ -12,17 +12,17 @@ load_dotenv()
 
 from config import get_config
 from app.extensions import db, cors
-from app.Models.UserModel import User
-from app.Models.kitchen import Kitchen
-from app.Models.item import Item
-from app.Models.restock_log import RestockLog
-from app.Models.consumption_log import ConsumptionLog
-from app.Routes.AuthRoutes import auth_ns
-from app.Routes.KitchenRoutes import kitchen_ns
-from app.Routes.ItemRoutes import item_ns
-from app.Routes.RestockLogRoutes import restock_ns
-from app.Routes.ConsumptionLogRoutes import consumption_ns
-from app.Controllers.HealthController import health_ns
+from app.models.user_model import User
+from app.models.kitchen import Kitchen
+from app.models.item import Item
+from app.models.restock_log import RestockLog
+from app.models.consumption_log import ConsumptionLog
+from app.routes.auth_routes import auth_ns
+from app.routes.kitchen_routes import kitchen_ns
+from app.routes.item_routes import item_ns
+from app.routes.restock_log_routes import restock_ns
+from app.routes.consumption_log_routes import consumption_ns
+from app.controllers.health_controller import health_ns
 
 
 def create_app(config_name: str = None) -> Flask:

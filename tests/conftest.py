@@ -4,11 +4,11 @@ Test configuration and fixtures for pytest.
 import pytest
 from app import create_app
 from app.extensions import db
-from app.Models.UserModel import User
-from app.Models.kitchen import Kitchen
-from app.Models.item import Item, ItemStatus
-from app.Models.restock_log import RestockLog
-from app.Models.consumption_log import ConsumptionLog
+from app.models.user_model import User
+from app.models.kitchen import Kitchen
+from app.models.item import Item, ItemStatus
+from app.models.restock_log import RestockLog
+from app.models.consumption_log import ConsumptionLog
 
 
 @pytest.fixture(scope="function")

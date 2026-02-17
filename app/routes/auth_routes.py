@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from flask_restx import Namespace, fields
 
-from app.Controllers.AuthController import (
+from app.controllers.auth_controller import (
     LoginResource,
     MeResource,
     RefreshResource,

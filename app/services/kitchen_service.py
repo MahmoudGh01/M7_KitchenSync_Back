@@ -4,7 +4,7 @@ import random
 from typing import Optional
 
 from app.extensions import db
-from app.Models.kitchen import Kitchen
+from app.models.kitchen import Kitchen
 
 
 class KitchenService:

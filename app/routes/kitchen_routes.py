@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from flask_restx import Namespace, fields
 
-from app.Controllers.KitchenController import (
+from app.controllers.kitchen_controller import (
     KitchenListResource,
     KitchenResource,
     KitchenByCodeResource,

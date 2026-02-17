@@ -2,8 +2,8 @@
 Unit tests for ItemService.
 """
 import pytest
-from app.Services.ItemService import ItemService
-from app.Models.item import Item, ItemStatus
+from app.services.item_service import ItemService
+from app.models.item import Item, ItemStatus
 
 
 @pytest.mark.unit

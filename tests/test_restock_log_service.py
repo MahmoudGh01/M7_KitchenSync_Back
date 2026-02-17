@@ -2,8 +2,8 @@
 Unit tests for RestockLogService.
 """
 import pytest
-from app.Services.RestockLogService import RestockLogService
-from app.Models.item import ItemStatus
+from app.services.restock_log_service import RestockLogService
+from app.models.item import ItemStatus
 
 
 @pytest.mark.unit
@@ -29,7 +29,7 @@ class TestRestockLogService:
             assert log.item_id == item_id
             
             # Query item again to see changes
-            from app.Models.item import Item
+            from app.models.item import Item
             updated_item = Item.query.get(item_id)
             # Check that item was restocked
             assert updated_item.quantity_percent == 100.0

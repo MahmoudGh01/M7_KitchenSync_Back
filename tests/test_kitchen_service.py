@@ -2,8 +2,8 @@
 Unit tests for KitchenService.
 """
 import pytest
-from app.Services.KitchenService import KitchenService
-from app.Models.kitchen import Kitchen
+from app.services.kitchen_service import KitchenService
+from app.models.kitchen import Kitchen
 
 
 @pytest.mark.unit

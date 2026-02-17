@@ -2,9 +2,9 @@
 Unit tests for AuthService.
 """
 import pytest
-from app.Services.AuthService import AuthService
-from app.Models.UserModel import User
-from app.Models.kitchen import Kitchen
+from app.services.auth_service import AuthService
+from app.models.user_model import User
+from app.models.kitchen import Kitchen
 
 
 @pytest.mark.unit

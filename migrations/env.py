@@ -35,11 +35,11 @@ config.set_main_option('sqlalchemy.url', app.config['SQLALCHEMY_DATABASE_URI'])
 # add your model's MetaData object here
 # for 'autogenerate' support
 # Import all models so they are registered with SQLAlchemy
-from app.Models.UserModel import User
-from app.Models.kitchen import Kitchen
-from app.Models.item import Item
-from app.Models.restock_log import RestockLog
-from app.Models.consumption_log import ConsumptionLog
+from app.models.user_model import User
+from app.models.kitchen import Kitchen
+from app.models.item import Item
+from app.models.restock_log import RestockLog
+from app.models.consumption_log import ConsumptionLog
 
 target_metadata = db.metadata
 

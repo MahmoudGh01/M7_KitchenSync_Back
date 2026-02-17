@@ -6,8 +6,8 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restx import Resource
 
-from app.Models.UserModel import User
-from app.Services.AuthService import AuthService
+from app.models.user_model import User
+from app.services.auth_service import AuthService
 
 
 def _get_json() -> dict:
