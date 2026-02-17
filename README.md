@@ -1,6 +1,6 @@
-# M7_BCN_Spoon
+# M7 KitchenSync API
 
-Minimal Flask app scaffold.
+Flask API with JWT authentication (access + refresh tokens) using Flask-RESTX.
 
 ## Requirements
 
@@ -15,10 +15,70 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Configuration
+
+Default configuration is defined in `app/__init__.py`. Update these as needed:
+
+- `SQLALCHEMY_DATABASE_URI` (MySQL)
+- `JWT_SECRET_KEY`
+- `JWT_ACCESS_TOKEN_EXPIRES` (seconds)
+- `JWT_REFRESH_TOKEN_EXPIRES` (seconds)
+
 ## Run
 
 ```bash
-python app/app.py
+export FLASK_APP=app
+flask run --host 0.0.0.0 --port 8000
 ```
 
 The server starts on `http://0.0.0.0:8000`.
+
+## API Documentation
+
+Swagger UI is available at:
+
+- `http://0.0.0.0:8000/docs`
+
+## Authentication Endpoints
+
+Base path: `/auth`
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `POST /auth/refresh`
+- `GET /auth/me`
+
+### Register
+
+```bash
+curl -X POST http://0.0.0.0:8000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"demo","email":"demo@example.com","password":"Strong#123"}'
+```
+
+### Login
+
+```bash
+curl -X POST http://0.0.0.0:8000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"identity":"demo@example.com","password":"Strong#123"}'
+```
+
+### Refresh Access Token
+
+```bash
+curl -X POST http://0.0.0.0:8000/auth/refresh \
+  -H "Authorization: Bearer <refresh_token>"
+```
+
+### Get Current User
+
+```bash
+curl -X GET http://0.0.0.0:8000/auth/me \
+  -H "Authorization: Bearer <access_token>"
+```
+
+## Validation Rules
+
+- Email must be valid format.
+- Password must be at least 8 characters and include upper, lower, number, and symbol.
