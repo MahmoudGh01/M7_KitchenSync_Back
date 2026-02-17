@@ -20,10 +20,6 @@ def _error(code: str, message: str, **kwargs) -> dict:
     return payload
 
 
-def _is_valid_email(email: str) -> bool:
-    return bool(re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", email))
-
-
 def _is_strong_password(password: str) -> bool:
     if len(password) < 8:
         return False
@@ -38,23 +34,20 @@ def _is_strong_password(password: str) -> bool:
     return True
 
 
+def _is_valid_kitchen_code(code: str) -> bool:
+    return bool(re.fullmatch(r"\d{6}", code))
+
+
 class RegisterResource(Resource):
     def post(self):
         data = _get_json()
-        required_fields = ["username", "email", "password"]
+        required_fields = ["display_name", "password", "kitchen_code"]
         missing = [field for field in required_fields if not data.get(field)]
         if missing:
             return _error(
                 "missing_fields",
                 "Missing required fields",
                 fields=missing,
-            ), 400
-
-        if not _is_valid_email(data["email"]):
-            return _error(
-                "validation_error",
-                "Invalid email format",
-                field="email",
             ), 400
 
         if not _is_strong_password(data["password"]):
@@ -64,31 +57,50 @@ class RegisterResource(Resource):
                 field="password",
             ), 400
 
+        if not _is_valid_kitchen_code(data["kitchen_code"]):
+            return _error(
+                "validation_error",
+                "Kitchen code must be exactly 6 digits",
+                field="kitchen_code",
+            ), 400
+
         try:
             user = AuthService.register_user(
-                username=data["username"],
-                email=data["email"],
+                display_name=data["display_name"],
                 password=data["password"],
+                kitchen_code=data["kitchen_code"],
             )
             tokens = AuthService.generate_tokens(user)
             return {"user": user.to_dict(), **tokens}, 201
         except ValueError as exc:
-            return _error("user_exists", str(exc)), 400
+            return _error("validation_error", str(exc)), 400
 
 
 class LoginResource(Resource):
     def post(self):
         data = _get_json()
-        identity = data.get("identity")
+        display_name = data.get("display_name")
+        kitchen_code = data.get("kitchen_code")
         password = data.get("password")
-        if not identity or not password:
+        if not display_name or not kitchen_code or not password:
             return _error(
                 "missing_fields",
                 "Missing required fields",
-                fields=["identity", "password"],
+                fields=["display_name", "kitchen_code", "password"],
             ), 400
 
-        user = AuthService.authenticate_user(identity=identity, password=password)
+        if not _is_valid_kitchen_code(kitchen_code):
+            return _error(
+                "validation_error",
+                "Kitchen code must be exactly 6 digits",
+                field="kitchen_code",
+            ), 400
+
+        user = AuthService.authenticate_user(
+            display_name=display_name,
+            password=password,
+            kitchen_code=kitchen_code,
+        )
         if not user:
             return _error("auth_invalid_credentials", "Invalid credentials"), 401
 
