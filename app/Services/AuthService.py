@@ -4,32 +4,49 @@ from typing import Optional
 
 from flask_jwt_extended import create_access_token, create_refresh_token
 
-from app.Models.UserModel import User, db
+from app.extensions import db
+from app.Models.UserModel import User
+from app.Models.kitchen import Kitchen
 
 
 class AuthService:
     @staticmethod
-    def register_user(username: str, email: str, password: str) -> User:
-        existing = User.query.filter(
-            (User.username == username) | (User.email == email)
+    def register_user(display_name: str, password: str, kitchen_code: str) -> User:
+        kitchen = Kitchen.query.filter_by(code=kitchen_code).first()
+        if not kitchen:
+            raise ValueError("Kitchen not found")
+
+        existing = User.query.filter_by(
+            display_name=display_name,
+            kitchen_id=kitchen.id,
         ).first()
         if existing:
-            raise ValueError("Username or email already in use")
+            raise ValueError("Display name already in use for this kitchen")
 
-        user = User(username=username, email=email)
+        user = User(display_name=display_name, kitchen_id=kitchen.id)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
         return user
 
     @staticmethod
-    def authenticate_user(identity: str, password: str) -> Optional[User]:
-        user = User.query.filter(
-            (User.email == identity) | (User.username == identity)
+    def authenticate_user(
+        display_name: str,
+        password: str,
+        kitchen_code: str,
+    ) -> Optional[User]:
+        kitchen = Kitchen.query.filter_by(code=kitchen_code).first()
+        if not kitchen:
+            return None
+        user = User.query.filter_by(
+            display_name=display_name,
+            kitchen_id=kitchen.id,
         ).first()
         if not user:
             return None
         if not user.check_password(password):
+            return None
+        if not user.is_active:
             return None
         return user
 

@@ -22,8 +22,14 @@ auth_ns = Namespace(
 register_model = auth_ns.model(
     "RegisterRequest",
     {
-        "username": fields.String(required=True, description="Unique username"),
-        "email": fields.String(required=True, description="Valid email address"),
+        "display_name": fields.String(
+            required=True,
+            description="Display name for the user",
+        ),
+        "kitchen_code": fields.String(
+            required=True,
+            description="6-digit kitchen code",
+        ),
         "password": fields.String(
             required=True,
             description=(
@@ -36,9 +42,13 @@ register_model = auth_ns.model(
 login_model = auth_ns.model(
     "LoginRequest",
     {
-        "identity": fields.String(
+        "display_name": fields.String(
             required=True,
-            description="Username or email",
+            description="User display name",
+        ),
+        "kitchen_code": fields.String(
+            required=True,
+            description="6-digit kitchen code",
         ),
         "password": fields.String(required=True, description="Account password"),
     },
@@ -48,8 +58,10 @@ user_model = auth_ns.model(
     "User",
     {
         "id": fields.Integer(description="User id"),
-        "username": fields.String(description="Username"),
-        "email": fields.String(description="Email"),
+        "display_name": fields.String(description="Display name"),
+        "kitchen_id": fields.Integer(description="Kitchen id"),
+        "kitchen_code": fields.String(description="Kitchen code"),
+        "is_active": fields.Boolean(description="Active status"),
     },
 )
 
@@ -124,7 +136,7 @@ class LoginRoute(LoginResource):
     @auth_ns.response(400, "Validation error", error_model)
     @auth_ns.response(401, "Invalid credentials", error_model)
     def post(self):
-        """Authenticate with username/email and password."""
+        """Authenticate with display name, kitchen code, and password."""
         return super().post()
 
 
