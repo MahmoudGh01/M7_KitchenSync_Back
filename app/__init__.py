@@ -44,7 +44,7 @@ def create_app(config_name: str = None) -> Flask:
     
     # Validate production config
     if config_name == 'production':
-        config_class.validate()
+        config_class.validate()  # type: ignore[attr-defined]
     
     # Setup logging
     config_class.setup_logging(app)
