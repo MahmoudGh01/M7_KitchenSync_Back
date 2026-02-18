@@ -2,7 +2,7 @@
 
 [![CI/CD](https://github.com/MahmoudGh01/M7_KitchenSync_Back/actions/workflows/ci.yml/badge.svg)](https://github.com/MahmoudGh01/M7_KitchenSync_Back/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/MahmoudGh01/M7_KitchenSync_Back/branch/main/graph/badge.svg)](https://codecov.io/gh/MahmoudGh01/M7_KitchenSync_Back)
-[![Python 3.14](https://img.shields.io/badge/python-3.14-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -290,7 +290,7 @@ pre-commit run --all-files
 ### Continuous Integration
 
 Every push and pull request triggers automated:
-- Tests on Python 3.14
+- Tests on Python 3.13 (compatible with 3.13+)
 - Coverage analysis with 80% minimum threshold
 - Security scanning (bandit, safety)
 - Code quality checks
