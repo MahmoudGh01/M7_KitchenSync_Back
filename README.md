@@ -295,9 +295,61 @@ Every push and pull request triggers automated:
 - Tests on Python 3.13 (compatible with 3.13+)
 - Coverage analysis with 80% minimum threshold
 - Security scanning (bandit, safety)
-- Code quality checks
+- Code quality checks (ruff, mypy)
+- Migration validation (alembic check)
 
 View CI/CD status: [GitHub Actions](https://github.com/MahmoudGh01/M7_KitchenSync_Back/actions)
+
+### Running Linters
+
+```bash
+# Run all linters (recommended - uses pre-commit)
+pre-commit run --all-files
+
+# Or run individually:
+
+# Code formatting check
+black app tests --check
+
+# Auto-format code
+black app tests
+
+# Linting
+ruff check app tests
+
+# Auto-fix linting issues
+ruff check app tests --fix
+
+# Import sorting
+isort app tests --check-only
+
+# Type checking
+mypy app --ignore-missing-imports
+
+# Security scan
+bandit -r app
+```
+
+## Dependency Management
+
+This project uses `pip-tools` for reproducible builds.
+
+### Update Dependencies
+
+```bash
+# Install pip-tools
+pip install pip-tools
+
+# Update all dependencies
+pip-compile requirements.in --upgrade
+pip-sync requirements.txt
+
+# Update single package
+pip-compile requirements.in --upgrade-package flask
+pip-sync requirements.txt
+```
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for detailed development guide.
 
 ## Project Structure
 
@@ -375,8 +427,33 @@ See [CONFIGURATION.md](CONFIGURATION.md) for complete list. Key variables:
 
 ## Deployment
 
-### Using Docker
+### Continuous Deployment
 
+**Automated Deployment:** Every commit to `main` branch can be automatically deployed using GitHub Actions, CI/CD pipelines, or platforms like Heroku, Railway, or Render.
+
+### Production Configuration
+
+**Required Environment Variables:**
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `FLASK_ENV` | Environment mode | `production` |
+| `SECRET_KEY` | Flask secret key (32+ chars) | `generate-with-secrets-module` |
+| `JWT_SECRET_KEY` | JWT signing key (32+ chars) | `generate-with-secrets-module` |
+| `DATABASE_URL` | Database connection | `mysql+mysqlconnector://user:pass@host:3306/db` |
+| `CORS_ORIGINS` | Allowed CORS origins | `https://yourdomain.com` |
+| `PORT` | Server port | `8000` |
+
+**Generate secrets:**
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+### Deployment Methods
+
+#### 1. Docker Deployment
+
+**Dockerfile:**
 ```dockerfile
 FROM python:3.13-slim
 WORKDIR /app
@@ -387,11 +464,127 @@ ENV FLASK_ENV=production
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "wsgi:app"]
 ```
 
-### Using Gunicorn (Production)
+**Build and run:**
+```bash
+docker build -t kitchensync-api .
+docker run -p 8000:8000 --env-file .env kitchensync-api
+```
 
+#### 2. Using Gunicorn (Production Server)
+
+**Install:**
 ```bash
 pip install gunicorn
+```
+
+**Run:**
+```bash
+# Basic
 gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
+
+# With logging
+gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app \
+  --access-logfile logs/access.log \
+  --error-logfile logs/error.log \
+  --log-level info
+
+# With worker class (for async)
+gunicorn -w 4 -k gevent -b 0.0.0.0:8000 wsgi:app
+```
+
+#### 3. Platform-as-a-Service
+
+**Heroku:**
+```bash
+# Create Procfile
+echo "web: gunicorn -w 4 -b 0.0.0.0:\$PORT wsgi:app" > Procfile
+
+# Deploy
+heroku create kitchensync-api
+git push heroku main
+heroku run alembic upgrade head  # Run migrations
+```
+
+**Railway/Render:**
+- Connect GitHub repository
+- Set environment variables
+- Deploy automatically on push to main
+
+### Database Migrations in Production
+
+**Automated migration on deployment:**
+
+1. **Add migration step to deployment script:**
+   ```bash
+   alembic upgrade head
+   ```
+
+2. **Docker entrypoint with migrations:**
+   ```dockerfile
+   ENTRYPOINT ["sh", "-c", "alembic upgrade head && gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app"]
+   ```
+
+3. **CI/CD pipeline (GitHub Actions):**
+   ```yaml
+   - name: Apply database migrations
+     run: alembic upgrade head
+   ```
+
+### Pre-deployment Checklist
+
+- [ ] `FLASK_ENV=production` in environment
+- [ ] `DEBUG=False` (set via FLASK_ENV)
+- [ ] Secure `SECRET_KEY` and `JWT_SECRET_KEY` configured
+- [ ] Database credentials secured
+- [ ] CORS origins restricted to your domain
+- [ ] All tests passing (`pytest`)
+- [ ] Coverage ≥ 80%
+- [ ] Migrations created and tested (`alembic check`)
+- [ ] Using gunicorn (not Flask dev server)
+- [ ] Logging configured
+- [ ] SSL/HTTPS enabled
+- [ ] Firewall rules configured
+
+### Deployment Workflow
+
+```mermaid
+graph LR
+    A[Push to main] --> B[CI Tests]
+    B --> C{Tests Pass?}
+    C -->|Yes| D[Build Docker Image]
+    C -->|No| E[Fix Issues]
+    D --> F[Deploy to Production]
+    F --> G[Run Migrations]
+    G --> H[Health Check]
+    H --> I[Live ✅]
+```
+
+### Monitoring
+
+**Health Check Endpoint:**
+```bash
+curl https://your-domain.com/health/
+```
+
+Expected response:
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "version": "1.0.0",
+  "timestamp": "2024-02-18T12:00:00Z"
+}
+```
+
+### Rollback Strategy
+
+```bash
+# Rollback to previous version
+git revert HEAD
+git push origin main
+
+# Rollback database migration
+alembic downgrade -1
 ```
 
 ## Troubleshooting

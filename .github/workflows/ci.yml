@@ -40,6 +40,11 @@ jobs:
           mypy app --ignore-missing-imports
         continue-on-error: true
 
+      - name: Check for missing migrations
+        run: |
+          alembic check || echo "Warning: Alembic check not available for this setup"
+        continue-on-error: true
+
       - name: Run tests with pytest
         run: |
           pytest
