@@ -78,14 +78,16 @@ DATABASE_URL=sqlite:///kitchensync.db
 
 **Development mode:**
 ```bash
-python -m app
+python wsgi.py
 # Or using Flask CLI
 flask run
+# Or as a module (legacy)
+python -m flask run
 ```
 
 **Production mode:**
 ```bash
-gunicorn -w 4 -b 0.0.0.0:8000 "app:create_app('production')"
+gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
 ```
 
 The server starts on `http://localhost:5000` (or port specified in `.env`)
@@ -376,20 +378,20 @@ See [CONFIGURATION.md](CONFIGURATION.md) for complete list. Key variables:
 ### Using Docker
 
 ```dockerfile
-FROM python:3.11-slim
+FROM python:3.13-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 ENV FLASK_ENV=production
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:create_app('production')"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "wsgi:app"]
 ```
 
 ### Using Gunicorn (Production)
 
 ```bash
 pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:8000 "app:create_app('production')"
+gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
 ```
 
 ## Troubleshooting
