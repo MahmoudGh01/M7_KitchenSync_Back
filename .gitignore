@@ -3,3 +3,6 @@
 *.pyc
 .env
 *.log
+.coverage
+coverage.xml
+*.db
