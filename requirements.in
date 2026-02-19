@@ -34,4 +34,4 @@ bandit~=1.7.6
 mypy~=1.8.0
 
 # Production Server
-gunicorn~=23.0.0
+gunicorn~=25.1.0
