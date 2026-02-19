@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from app.extensions import db
 from app.models.item import Item, ItemStatus
 
@@ -11,7 +9,7 @@ class ItemService:
     def create_item(
         name: str,
         kitchen_id: int,
-        category: Optional[str] = None,
+        category: str | None = None,
         quantity_percent: float = 100.0,
         low_stock_threshold: float = 20.0,
         status: ItemStatus = ItemStatus.IN_STOCK,
@@ -30,7 +28,7 @@ class ItemService:
         return item
 
     @staticmethod
-    def get_item_by_id(item_id: int) -> Optional[Item]:
+    def get_item_by_id(item_id: int) -> Item | None:
         """Get an item by ID."""
         return Item.query.get(item_id)
 
@@ -42,12 +40,12 @@ class ItemService:
     @staticmethod
     def update_item(
         item_id: int,
-        name: Optional[str] = None,
-        category: Optional[str] = None,
-        quantity_percent: Optional[float] = None,
-        low_stock_threshold: Optional[float] = None,
-        status: Optional[ItemStatus] = None,
-    ) -> Optional[Item]:
+        name: str | None = None,
+        category: str | None = None,
+        quantity_percent: float | None = None,
+        low_stock_threshold: float | None = None,
+        status: ItemStatus | None = None,
+    ) -> Item | None:
         """Update an item."""
         item = Item.query.get(item_id)
         if not item:
@@ -78,7 +76,7 @@ class ItemService:
         return True
 
     @staticmethod
-    def update_quantity(item_id: int, quantity_percent: float) -> Optional[Item]:
+    def update_quantity(item_id: int, quantity_percent: float) -> Item | None:
         """Update item quantity and adjust status if needed."""
         item = Item.query.get(item_id)
         if not item:

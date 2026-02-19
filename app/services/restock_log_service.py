@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
 from datetime import datetime
 
 from app.extensions import db
@@ -10,7 +9,7 @@ from app.models.item import Item, ItemStatus
 
 class RestockLogService:
     @staticmethod
-    def create_restock_log(user_id: int, item_id: int) -> Optional[RestockLog]:
+    def create_restock_log(user_id: int, item_id: int) -> RestockLog | None:
         """Create a new restock log and update item to full stock."""
         item = Item.query.get(item_id)
         if not item:
@@ -28,7 +27,7 @@ class RestockLogService:
         return log
 
     @staticmethod
-    def get_restock_log_by_id(log_id: int) -> Optional[RestockLog]:
+    def get_restock_log_by_id(log_id: int) -> RestockLog | None:
         """Get a restock log by ID."""
         return RestockLog.query.get(log_id)
 

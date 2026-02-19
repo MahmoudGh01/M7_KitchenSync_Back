@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
 
 from flask_jwt_extended import create_access_token, create_refresh_token
 
@@ -34,7 +33,7 @@ class AuthService:
         display_name: str,
         password: str,
         kitchen_code: str,
-    ) -> Optional[User]:
+    ) -> User | None:
         kitchen = Kitchen.query.filter_by(code=kitchen_code).first()
         if not kitchen:
             return None

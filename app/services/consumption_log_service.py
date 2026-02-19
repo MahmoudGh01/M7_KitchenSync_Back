@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
 from datetime import datetime
 
 from app.extensions import db
@@ -14,7 +13,7 @@ class ConsumptionLogService:
         user_id: int,
         item_id: int,
         percent_used: float,
-    ) -> Optional[ConsumptionLog]:
+    ) -> ConsumptionLog | None:
         """Create a new consumption log and update item quantity."""
         item = Item.query.get(item_id)
         if not item:
@@ -40,7 +39,7 @@ class ConsumptionLogService:
         return log
 
     @staticmethod
-    def get_consumption_log_by_id(log_id: int) -> Optional[ConsumptionLog]:
+    def get_consumption_log_by_id(log_id: int) -> ConsumptionLog | None:
         """Get a consumption log by ID."""
         return ConsumptionLog.query.get(log_id)
 

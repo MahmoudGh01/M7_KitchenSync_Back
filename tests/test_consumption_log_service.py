@@ -99,7 +99,7 @@ class TestConsumptionLogService:
             
             logs = ConsumptionLogService.get_consumption_logs_by_item(sample_item.id)
             assert len(logs) >= 2
-            log_ids = [l.id for l in logs]
+            log_ids = [log_entry.id for log_entry in logs]
             assert log1.id in log_ids
             assert log2.id in log_ids
 
@@ -114,7 +114,7 @@ class TestConsumptionLogService:
             
             logs = ConsumptionLogService.get_consumption_logs_by_kitchen(sample_kitchen.id)
             assert len(logs) >= 1
-            assert any(l.id == log.id for l in logs)
+            assert any(log_entry.id == log.id for log_entry in logs)
 
     def test_get_consumption_logs_by_user(self, app, sample_user, sample_item):
         """Test getting consumption logs by user."""
@@ -127,7 +127,7 @@ class TestConsumptionLogService:
             
             logs = ConsumptionLogService.get_consumption_logs_by_user(sample_user.id)
             assert len(logs) >= 1
-            assert any(l.id == log.id for l in logs)
+            assert any(log_entry.id == log.id for log_entry in logs)
 
     def test_delete_consumption_log(self, app, sample_user, sample_item):
         """Test deleting a consumption log."""

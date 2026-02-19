@@ -13,7 +13,7 @@ class Config:
     """Base configuration class with common settings."""
     
     # Flask Configuration
-    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')  # nosec
     
     # SQLAlchemy Configuration
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -33,7 +33,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     
     # JWT Configuration
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'dev-jwt-secret-key-minimum-32-characters')
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'dev-jwt-secret-key-minimum-32-characters')  # nosec
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=int(os.getenv('JWT_ACCESS_TOKEN_EXPIRES', '900')))
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(seconds=int(os.getenv('JWT_REFRESH_TOKEN_EXPIRES', '604800')))
     
@@ -114,9 +114,9 @@ class ProductionConfig(Config):
     @classmethod
     def validate(cls):
         """Validate that required production settings are configured."""
-        if cls.SECRET_KEY == 'dev-secret-key-change-in-production':
+        if cls.SECRET_KEY == 'dev-secret-key-change-in-production':  # nosec
             raise ValueError("SECRET_KEY must be set in production!")
-        if cls.JWT_SECRET_KEY == 'dev-jwt-secret-key-minimum-32-characters':
+        if cls.JWT_SECRET_KEY == 'dev-jwt-secret-key-minimum-32-characters':  # nosec
             raise ValueError("JWT_SECRET_KEY must be set in production!")
         if len(cls.JWT_SECRET_KEY) < 32:
             raise ValueError("JWT_SECRET_KEY must be at least 32 characters long!")
@@ -126,7 +126,7 @@ class TestingConfig(Config):
     """Testing environment configuration."""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    JWT_SECRET_KEY = 'test-secret-key'
+    JWT_SECRET_KEY = 'test-secret-key'  # nosec
     WTF_CSRF_ENABLED = False
 
 

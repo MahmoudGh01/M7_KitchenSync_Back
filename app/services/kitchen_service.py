@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import random
-from typing import Optional
+import secrets
 
 from app.extensions import db
 from app.models.kitchen import Kitchen
@@ -12,7 +11,7 @@ class KitchenService:
     def generate_unique_code() -> str:
         """Generate a unique 6-digit kitchen code."""
         while True:
-            code = f"{random.randint(0, 999999):06d}"
+            code = f"{secrets.randbelow(1000000):06d}"
             if not Kitchen.query.filter_by(code=code).first():
                 return code
 
@@ -26,12 +25,12 @@ class KitchenService:
         return kitchen
 
     @staticmethod
-    def get_kitchen_by_id(kitchen_id: int) -> Optional[Kitchen]:
+    def get_kitchen_by_id(kitchen_id: int) -> Kitchen | None:
         """Get a kitchen by ID."""
         return Kitchen.query.get(kitchen_id)
 
     @staticmethod
-    def get_kitchen_by_code(code: str) -> Optional[Kitchen]:
+    def get_kitchen_by_code(code: str) -> Kitchen | None:
         """Get a kitchen by its unique code."""
         return Kitchen.query.filter_by(code=code).first()
 
@@ -41,7 +40,7 @@ class KitchenService:
         return Kitchen.query.all()
 
     @staticmethod
-    def update_kitchen(kitchen_id: int, name: str) -> Optional[Kitchen]:
+    def update_kitchen(kitchen_id: int, name: str) -> Kitchen | None:
         """Update a kitchen's name."""
         kitchen = Kitchen.query.get(kitchen_id)
         if not kitchen:
