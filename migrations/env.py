@@ -1,18 +1,17 @@
-from logging.config import fileConfig
 import os
 import sys
+from logging.config import fileConfig
 from pathlib import Path
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # Add the project root to the Python path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # Load environment variables
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Import Flask app and database
@@ -30,16 +29,17 @@ if config.config_file_name is not None:
 
 # Create Flask app and get database URI
 app = create_app()
-config.set_main_option('sqlalchemy.url', app.config['SQLALCHEMY_DATABASE_URI'])
+config.set_main_option("sqlalchemy.url", app.config["SQLALCHEMY_DATABASE_URI"])
+
+from app.models.consumption_log import ConsumptionLog
+from app.models.item import Item
+from app.models.kitchen import Kitchen
+from app.models.restock_log import RestockLog
 
 # add your model's MetaData object here
 # for 'autogenerate' support
 # Import all models so they are registered with SQLAlchemy
 from app.models.user_model import User
-from app.models.kitchen import Kitchen
-from app.models.item import Item
-from app.models.restock_log import RestockLog
-from app.models.consumption_log import ConsumptionLog
 
 target_metadata = db.metadata
 
@@ -87,9 +87,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
