@@ -32,10 +32,13 @@ class RestockLogListResource(Resource):
         elif user_id:
             logs = RestockLogService.get_restock_logs_by_user(user_id)
         else:
-            return _error(
-                "missing_parameter",
-                "One of item_id, kitchen_id, or user_id is required",
-            ), 400
+            return (
+                _error(
+                    "missing_parameter",
+                    "One of item_id, kitchen_id, or user_id is required",
+                ),
+                400,
+            )
 
         return {"logs": [log.to_dict() for log in logs]}, 200
 

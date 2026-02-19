@@ -1,9 +1,11 @@
 """
 Unit tests for RestockLogService.
 """
+
 import pytest
-from app.services.restock_log_service import RestockLogService
+
 from app.models.item import ItemStatus
+from app.services.restock_log_service import RestockLogService
 
 
 @pytest.mark.unit
@@ -27,9 +29,10 @@ class TestRestockLogService:
             assert log is not None
             assert log.user_id == sample_user.id
             assert log.item_id == item_id
-            
+
             # Query item again to see changes
             from app.models.item import Item
+
             updated_item = Item.query.get(item_id)
             # Check that item was restocked
             assert updated_item.quantity_percent == 100.0
@@ -72,7 +75,7 @@ class TestRestockLogService:
                 user_id=sample_user.id,
                 item_id=sample_item.id,
             )
-            
+
             logs = RestockLogService.get_restock_logs_by_item(sample_item.id)
             assert len(logs) >= 2
             log_ids = [log_entry.id for log_entry in logs]
@@ -86,7 +89,7 @@ class TestRestockLogService:
                 user_id=sample_user.id,
                 item_id=sample_item.id,
             )
-            
+
             logs = RestockLogService.get_restock_logs_by_kitchen(sample_kitchen.id)
             assert len(logs) >= 1
             assert any(log_entry.id == log.id for log_entry in logs)
@@ -98,7 +101,7 @@ class TestRestockLogService:
                 user_id=sample_user.id,
                 item_id=sample_item.id,
             )
-            
+
             logs = RestockLogService.get_restock_logs_by_user(sample_user.id)
             assert len(logs) >= 1
             assert any(log_entry.id == log.id for log_entry in logs)
@@ -110,10 +113,10 @@ class TestRestockLogService:
                 user_id=sample_user.id,
                 item_id=sample_item.id,
             )
-            
+
             success = RestockLogService.delete_restock_log(log.id)
             assert success is True
-            
+
             retrieved = RestockLogService.get_restock_log_by_id(log.id)
             assert retrieved is None
 

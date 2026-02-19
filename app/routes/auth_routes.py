@@ -119,6 +119,7 @@ auth_header.add_argument(
     help="Bearer <token>",
 )
 
+
 @auth_ns.route("/register")
 class RegisterRoute(RegisterResource):
     @auth_ns.expect(register_model)

@@ -1,9 +1,11 @@
 """
 Unit tests for KitchenService.
 """
+
 import pytest
-from app.services.kitchen_service import KitchenService
+
 from app.models.kitchen import Kitchen
+from app.services.kitchen_service import KitchenService
 
 
 @pytest.mark.unit
@@ -65,9 +67,7 @@ class TestKitchenService:
     def test_update_kitchen(self, app, sample_kitchen):
         """Test updating kitchen name."""
         with app.app_context():
-            updated = KitchenService.update_kitchen(
-                sample_kitchen.id, "Updated Kitchen"
-            )
+            updated = KitchenService.update_kitchen(sample_kitchen.id, "Updated Kitchen")
             assert updated is not None
             assert updated.name == "Updated Kitchen"
             assert updated.id == sample_kitchen.id

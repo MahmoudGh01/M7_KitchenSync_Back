@@ -1,7 +1,9 @@
-from sqlalchemy import String, ForeignKey, Boolean
+from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from app.extensions import db
-from werkzeug.security import generate_password_hash, check_password_hash
+
 
 class User(db.Model):
     __tablename__ = "users"
@@ -12,10 +14,7 @@ class User(db.Model):
 
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    kitchen_id: Mapped[int] = mapped_column(
-        ForeignKey("kitchens.id"),
-        nullable=False
-    )
+    kitchen_id: Mapped[int] = mapped_column(ForeignKey("kitchens.id"), nullable=False)
 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 

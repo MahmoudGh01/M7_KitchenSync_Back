@@ -1,11 +1,15 @@
-from sqlalchemy import String, Enum, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.extensions import db
 import enum
+
+from sqlalchemy import Enum, ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.extensions import db
+
 
 class ItemStatus(enum.Enum):
     NEEDED = "needed"
     IN_STOCK = "in_stock"
+
 
 class Item(db.Model):
     __tablename__ = "items"
@@ -20,15 +24,9 @@ class Item(db.Model):
 
     low_stock_threshold: Mapped[float] = mapped_column(default=20.0)
 
-    status: Mapped[ItemStatus] = mapped_column(
-        Enum(ItemStatus),
-        default=ItemStatus.NEEDED
-    )
+    status: Mapped[ItemStatus] = mapped_column(Enum(ItemStatus), default=ItemStatus.NEEDED)
 
-    kitchen_id: Mapped[int] = mapped_column(
-        ForeignKey("kitchens.id"),
-        nullable=False
-    )
+    kitchen_id: Mapped[int] = mapped_column(ForeignKey("kitchens.id"), nullable=False)
 
     kitchen = relationship("Kitchen", back_populates="items")
     restocks = relationship("RestockLog", back_populates="item")

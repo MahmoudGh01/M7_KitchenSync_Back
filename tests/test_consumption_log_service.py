@@ -1,9 +1,11 @@
 """
 Unit tests for ConsumptionLogService.
 """
+
 import pytest
-from app.services.consumption_log_service import ConsumptionLogService
+
 from app.models.item import ItemStatus
+from app.services.consumption_log_service import ConsumptionLogService
 
 
 @pytest.mark.unit
@@ -17,7 +19,7 @@ class TestConsumptionLogService:
             sample_item.quantity_percent = 100.0
             db_session.commit()  # Commit the change before service call
             item_id = sample_item.id  # Save ID before detachment
-            
+
             log = ConsumptionLogService.create_consumption_log(
                 user_id=sample_user.id,
                 item_id=item_id,
@@ -27,9 +29,10 @@ class TestConsumptionLogService:
             assert log.user_id == sample_user.id
             assert log.item_id == item_id
             assert log.percent_used == 25.0
-            
+
             # Query item again to see changes
             from app.models.item import Item
+
             updated_item = Item.query.get(item_id)
             # Check that item quantity was reduced
             assert updated_item.quantity_percent == 75.0
@@ -40,16 +43,17 @@ class TestConsumptionLogService:
             sample_item.quantity_percent = 30.0
             db_session.commit()  # Commit the change before service call
             item_id = sample_item.id  # Save ID before detachment
-            
+
             log = ConsumptionLogService.create_consumption_log(
                 user_id=sample_user.id,
                 item_id=item_id,
                 percent_used=40.0,
             )
             assert log is not None
-            
+
             # Query item again to see changes
             from app.models.item import Item
+
             updated_item = Item.query.get(item_id)
             # Check that item is depleted and status updated
             assert updated_item.quantity_percent == 0.0
@@ -96,7 +100,7 @@ class TestConsumptionLogService:
                 item_id=sample_item.id,
                 percent_used=15.0,
             )
-            
+
             logs = ConsumptionLogService.get_consumption_logs_by_item(sample_item.id)
             assert len(logs) >= 2
             log_ids = [log_entry.id for log_entry in logs]
@@ -111,7 +115,7 @@ class TestConsumptionLogService:
                 item_id=sample_item.id,
                 percent_used=20.0,
             )
-            
+
             logs = ConsumptionLogService.get_consumption_logs_by_kitchen(sample_kitchen.id)
             assert len(logs) >= 1
             assert any(log_entry.id == log.id for log_entry in logs)
@@ -124,7 +128,7 @@ class TestConsumptionLogService:
                 item_id=sample_item.id,
                 percent_used=30.0,
             )
-            
+
             logs = ConsumptionLogService.get_consumption_logs_by_user(sample_user.id)
             assert len(logs) >= 1
             assert any(log_entry.id == log.id for log_entry in logs)
@@ -137,10 +141,10 @@ class TestConsumptionLogService:
                 item_id=sample_item.id,
                 percent_used=5.0,
             )
-            
+
             success = ConsumptionLogService.delete_consumption_log(log.id)
             assert success is True
-            
+
             retrieved = ConsumptionLogService.get_consumption_log_by_id(log.id)
             assert retrieved is None
 

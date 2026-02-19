@@ -32,10 +32,13 @@ class ConsumptionLogListResource(Resource):
         elif user_id:
             logs = ConsumptionLogService.get_consumption_logs_by_user(user_id)
         else:
-            return _error(
-                "missing_parameter",
-                "One of item_id, kitchen_id, or user_id is required",
-            ), 400
+            return (
+                _error(
+                    "missing_parameter",
+                    "One of item_id, kitchen_id, or user_id is required",
+                ),
+                400,
+            )
 
         return {"logs": [log.to_dict() for log in logs]}, 200
 
@@ -56,11 +59,14 @@ class ConsumptionLogListResource(Resource):
             return _error("missing_fields", "Missing required fields", fields=missing), 400
 
         if not (0 <= percent_used <= 100):
-            return _error(
-                "validation_error",
-                "percent_used must be between 0 and 100",
-                field="percent_used",
-            ), 400
+            return (
+                _error(
+                    "validation_error",
+                    "percent_used must be between 0 and 100",
+                    field="percent_used",
+                ),
+                400,
+            )
 
         log = ConsumptionLogService.create_consumption_log(
             user_id=user_id,

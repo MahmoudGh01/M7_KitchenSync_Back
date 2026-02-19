@@ -1,21 +1,23 @@
 """
 Test configuration and fixtures for pytest.
 """
+
 import pytest
+
 from app import create_app
 from app.extensions import db
-from app.models.user_model import User
-from app.models.kitchen import Kitchen
-from app.models.item import Item, ItemStatus
-from app.models.restock_log import RestockLog
 from app.models.consumption_log import ConsumptionLog
+from app.models.item import Item, ItemStatus
+from app.models.kitchen import Kitchen
+from app.models.restock_log import RestockLog
+from app.models.user_model import User
 
 
 @pytest.fixture(scope="function")
 def app():
     """Create and configure a test Flask app instance using testing config."""
-    test_app = create_app('testing')
-    
+    test_app = create_app("testing")
+
     with test_app.app_context():
         db.create_all()
         yield test_app

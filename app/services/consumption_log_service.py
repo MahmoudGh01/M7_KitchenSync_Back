@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime
-
 from app.extensions import db
 from app.models.consumption_log import ConsumptionLog
 from app.models.item import Item, ItemStatus
@@ -46,9 +44,11 @@ class ConsumptionLogService:
     @staticmethod
     def get_consumption_logs_by_item(item_id: int) -> list[ConsumptionLog]:
         """Get all consumption logs for an item."""
-        return ConsumptionLog.query.filter_by(item_id=item_id).order_by(
-            ConsumptionLog.created_at.desc()
-        ).all()
+        return (
+            ConsumptionLog.query.filter_by(item_id=item_id)
+            .order_by(ConsumptionLog.created_at.desc())
+            .all()
+        )
 
     @staticmethod
     def get_consumption_logs_by_kitchen(kitchen_id: int) -> list[ConsumptionLog]:
@@ -63,9 +63,11 @@ class ConsumptionLogService:
     @staticmethod
     def get_consumption_logs_by_user(user_id: int) -> list[ConsumptionLog]:
         """Get all consumption logs for a user."""
-        return ConsumptionLog.query.filter_by(user_id=user_id).order_by(
-            ConsumptionLog.created_at.desc()
-        ).all()
+        return (
+            ConsumptionLog.query.filter_by(user_id=user_id)
+            .order_by(ConsumptionLog.created_at.desc())
+            .all()
+        )
 
     @staticmethod
     def delete_consumption_log(log_id: int) -> bool:

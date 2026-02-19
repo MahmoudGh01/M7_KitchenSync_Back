@@ -1,7 +1,10 @@
 from datetime import datetime
-from sqlalchemy import String, DateTime
+
+from sqlalchemy import DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.extensions import db
+
 
 class Kitchen(db.Model):
     __tablename__ = "kitchens"
@@ -9,18 +12,12 @@ class Kitchen(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     code: Mapped[str] = mapped_column(
-        String(6),
-        unique=True,
-        nullable=False,
-        index=True
+        String(6), unique=True, nullable=False, index=True
     )  # Unique 6-digit room code
 
     name: Mapped[str] = mapped_column(String(120), nullable=False)
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        default=datetime.utcnow
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     users = relationship("User", back_populates="kitchen")
     items = relationship("Item", back_populates="kitchen")

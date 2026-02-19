@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from datetime import datetime
-
 from app.extensions import db
-from app.models.restock_log import RestockLog
 from app.models.item import Item, ItemStatus
+from app.models.restock_log import RestockLog
 
 
 class RestockLogService:
@@ -34,9 +32,9 @@ class RestockLogService:
     @staticmethod
     def get_restock_logs_by_item(item_id: int) -> list[RestockLog]:
         """Get all restock logs for an item."""
-        return RestockLog.query.filter_by(item_id=item_id).order_by(
-            RestockLog.created_at.desc()
-        ).all()
+        return (
+            RestockLog.query.filter_by(item_id=item_id).order_by(RestockLog.created_at.desc()).all()
+        )
 
     @staticmethod
     def get_restock_logs_by_kitchen(kitchen_id: int) -> list[RestockLog]:
@@ -51,9 +49,9 @@ class RestockLogService:
     @staticmethod
     def get_restock_logs_by_user(user_id: int) -> list[RestockLog]:
         """Get all restock logs for a user."""
-        return RestockLog.query.filter_by(user_id=user_id).order_by(
-            RestockLog.created_at.desc()
-        ).all()
+        return (
+            RestockLog.query.filter_by(user_id=user_id).order_by(RestockLog.created_at.desc()).all()
+        )
 
     @staticmethod
     def delete_restock_log(log_id: int) -> bool:

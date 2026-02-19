@@ -4,8 +4,8 @@ from flask_restx import Namespace, fields
 
 from app.controllers.item_controller import (
     ItemListResource,
-    ItemResource,
     ItemQuantityResource,
+    ItemResource,
 )
 
 item_ns = Namespace(
@@ -21,9 +21,7 @@ item_model = item_ns.model(
         "name": fields.String(description="Item name"),
         "category": fields.String(description="Item category"),
         "quantity_percent": fields.Float(description="Quantity as percentage (0-100)"),
-        "low_stock_threshold": fields.Float(
-            description="Low stock threshold percentage"
-        ),
+        "low_stock_threshold": fields.Float(description="Low stock threshold percentage"),
         "status": fields.String(description="Item status (needed, in_stock)"),
         "kitchen_id": fields.Integer(description="Kitchen ID"),
     },
@@ -35,12 +33,8 @@ create_item_model = item_ns.model(
         "name": fields.String(required=True, description="Item name"),
         "kitchen_id": fields.Integer(required=True, description="Kitchen ID"),
         "category": fields.String(description="Item category"),
-        "quantity_percent": fields.Float(
-            description="Quantity as percentage (default: 100.0)"
-        ),
-        "low_stock_threshold": fields.Float(
-            description="Low stock threshold (default: 20.0)"
-        ),
+        "quantity_percent": fields.Float(description="Quantity as percentage (default: 100.0)"),
+        "low_stock_threshold": fields.Float(description="Low stock threshold (default: 20.0)"),
         "status": fields.String(
             description="Item status: 'needed' or 'in_stock' (default: in_stock)"
         ),

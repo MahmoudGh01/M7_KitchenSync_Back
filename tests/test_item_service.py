@@ -1,9 +1,11 @@
 """
 Unit tests for ItemService.
 """
+
 import pytest
-from app.services.item_service import ItemService
+
 from app.models.item import Item, ItemStatus
+from app.services.item_service import ItemService
 
 
 @pytest.mark.unit

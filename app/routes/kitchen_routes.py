@@ -3,9 +3,9 @@ from __future__ import annotations
 from flask_restx import Namespace, fields
 
 from app.controllers.kitchen_controller import (
+    KitchenByCodeResource,
     KitchenListResource,
     KitchenResource,
-    KitchenByCodeResource,
 )
 
 kitchen_ns = Namespace(

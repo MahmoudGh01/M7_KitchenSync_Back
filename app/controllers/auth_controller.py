@@ -44,25 +44,34 @@ class RegisterResource(Resource):
         required_fields = ["display_name", "password", "kitchen_code"]
         missing = [field for field in required_fields if not data.get(field)]
         if missing:
-            return _error(
-                "missing_fields",
-                "Missing required fields",
-                fields=missing,
-            ), 400
+            return (
+                _error(
+                    "missing_fields",
+                    "Missing required fields",
+                    fields=missing,
+                ),
+                400,
+            )
 
         if not _is_strong_password(data["password"]):
-            return _error(
-                "validation_error",
-                "Password must be at least 8 characters and include upper, lower, number, and symbol",
-                field="password",
-            ), 400
+            return (
+                _error(
+                    "validation_error",
+                    "Password must be at least 8 characters and include upper, lower, number, and symbol",
+                    field="password",
+                ),
+                400,
+            )
 
         if not _is_valid_kitchen_code(data["kitchen_code"]):
-            return _error(
-                "validation_error",
-                "Kitchen code must be exactly 6 digits",
-                field="kitchen_code",
-            ), 400
+            return (
+                _error(
+                    "validation_error",
+                    "Kitchen code must be exactly 6 digits",
+                    field="kitchen_code",
+                ),
+                400,
+            )
 
         try:
             user = AuthService.register_user(
@@ -83,18 +92,24 @@ class LoginResource(Resource):
         kitchen_code = data.get("kitchen_code")
         password = data.get("password")
         if not display_name or not kitchen_code or not password:
-            return _error(
-                "missing_fields",
-                "Missing required fields",
-                fields=["display_name", "kitchen_code", "password"],
-            ), 400
+            return (
+                _error(
+                    "missing_fields",
+                    "Missing required fields",
+                    fields=["display_name", "kitchen_code", "password"],
+                ),
+                400,
+            )
 
         if not _is_valid_kitchen_code(kitchen_code):
-            return _error(
-                "validation_error",
-                "Kitchen code must be exactly 6 digits",
-                field="kitchen_code",
-            ), 400
+            return (
+                _error(
+                    "validation_error",
+                    "Kitchen code must be exactly 6 digits",
+                    field="kitchen_code",
+                ),
+                400,
+            )
 
         user = AuthService.authenticate_user(
             display_name=display_name,

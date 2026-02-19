@@ -28,9 +28,7 @@ create_consumption_log_model = consumption_ns.model(
     "CreateConsumptionLog",
     {
         "item_id": fields.Integer(required=True, description="Item to consume"),
-        "percent_used": fields.Float(
-            required=True, description="Percentage to consume (0-100)"
-        ),
+        "percent_used": fields.Float(required=True, description="Percentage to consume (0-100)"),
     },
 )
 

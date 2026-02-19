@@ -1,10 +1,12 @@
 """
 Unit tests for AuthService.
 """
+
 import pytest
-from app.services.auth_service import AuthService
-from app.models.user_model import User
+
 from app.models.kitchen import Kitchen
+from app.models.user_model import User
+from app.services.auth_service import AuthService
 
 
 @pytest.mark.unit

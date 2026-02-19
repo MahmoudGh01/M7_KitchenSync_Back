@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-
 from flask_jwt_extended import create_access_token, create_refresh_token
 
 from app.extensions import db
-from app.models.user_model import User
 from app.models.kitchen import Kitchen
+from app.models.user_model import User
 
 
 class AuthService:

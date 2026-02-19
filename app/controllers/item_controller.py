@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from flask import request
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required
 from flask_restx import Resource
 
-from app.services.item_service import ItemService
 from app.models.item import ItemStatus
+from app.services.item_service import ItemService
 
 
 def _get_json() -> dict:
@@ -44,11 +44,14 @@ class ItemListResource(Resource):
             try:
                 status = ItemStatus(data["status"])
             except ValueError:
-                return _error(
-                    "validation_error",
-                    "Invalid status. Must be 'needed' or 'in_stock'",
-                    field="status",
-                ), 400
+                return (
+                    _error(
+                        "validation_error",
+                        "Invalid status. Must be 'needed' or 'in_stock'",
+                        field="status",
+                    ),
+                    400,
+                )
 
         item = ItemService.create_item(
             name=data["name"],
@@ -81,11 +84,14 @@ class ItemResource(Resource):
             try:
                 status = ItemStatus(data["status"])
             except ValueError:
-                return _error(
-                    "validation_error",
-                    "Invalid status. Must be 'needed' or 'in_stock'",
-                    field="status",
-                ), 400
+                return (
+                    _error(
+                        "validation_error",
+                        "Invalid status. Must be 'needed' or 'in_stock'",
+                        field="status",
+                    ),
+                    400,
+                )
 
         item = ItemService.update_item(
             item_id=item_id,
@@ -119,11 +125,14 @@ class ItemQuantityResource(Resource):
             return _error("missing_fields", "quantity_percent is required"), 400
 
         if not (0 <= quantity_percent <= 100):
-            return _error(
-                "validation_error",
-                "quantity_percent must be between 0 and 100",
-                field="quantity_percent",
-            ), 400
+            return (
+                _error(
+                    "validation_error",
+                    "quantity_percent must be between 0 and 100",
+                    field="quantity_percent",
+                ),
+                400,
+            )
 
         item = ItemService.update_quantity(item_id, quantity_percent)
         if not item:
