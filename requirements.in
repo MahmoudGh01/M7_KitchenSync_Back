@@ -28,7 +28,7 @@ pytest-cov~=6.0.0
 # Development Tools
 pre-commit~=3.6.0
 black~=24.1.1
-isort~=5.13.2
+isort~=7.0.0
 ruff~=0.1.15
 bandit~=1.7.6
 mypy~=1.8.0
